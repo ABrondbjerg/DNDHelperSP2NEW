@@ -1,0 +1,26 @@
+package dat.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@Entity
+public class Action {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+    private String description;
+    private String damageDice;
+
+    public Action(String name, String description,String damageDice) {
+        this.name = name;
+        this.description = description;
+        this.damageDice = damageDice;
+    }
+}
