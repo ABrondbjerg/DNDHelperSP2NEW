@@ -1,5 +1,6 @@
 package dat.config;
 
+import dat.entities.*;
 import dat.security.entities.Role;
 import dat.security.entities.User;
 import dat.utils.Utils;
@@ -41,8 +42,11 @@ public class HibernateConfig {
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-        configuration.addAnnotatedClass(Hotel.class);
-        configuration.addAnnotatedClass(Room.class);
+        configuration.addAnnotatedClass(Town.class);
+        configuration.addAnnotatedClass(Shop.class);
+        configuration.addAnnotatedClass(Monster.class);
+        configuration.addAnnotatedClass(Action.class);
+        configuration.addAnnotatedClass(NPC.class);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Role.class);
     }
@@ -79,7 +83,7 @@ public class HibernateConfig {
     private static Properties setBaseProperties(Properties props) {
         props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        props.put("hibernate.hbm2ddl.auto", "create");
+        props.put("hibernate.hbm2ddl.auto", "update");
         props.put("hibernate.current_session_context_class", "thread");
         props.put("hibernate.show_sql", "true");
         props.put("hibernate.format_sql", "true");

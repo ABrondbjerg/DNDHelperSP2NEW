@@ -1,47 +1,70 @@
 package dat.entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Shop {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
+
+    @Enumerated(EnumType.STRING)
     private ShopType shoptype;
+
     private String owner;
 
-    public Shop(String name, ShopType shoptype, String owner) {
+    @ManyToMany(mappedBy = "shops")
+    private java.util.List<Town> towns;
+
+    public Shop(@JsonProperty("name") String name,
+                @JsonProperty("shoptype") ShopType shoptype,
+                @JsonProperty("owner") String owner) {
         this.name = name;
         this.shoptype = shoptype;
         this.owner = owner;
     }
 
     public enum ShopType {
-        BLACKSMITH,          // Smed - våben, rustninger, værktøj
-        ALCHEMIST,           // Trylledrikke, eliksirer, ingredienser
-        GENERAL_STORE,       // Diverse handelsvarer og basisudstyr
-        MAGIC_SHOP,          // Tryllestave, runer, magiske artefakter
-        ARMORER,             // Specialiseret i rustninger og skjolde
-        WEAPONSMITH,         // Specialiseret i våben
-        TAILOR,              // Tøj, kapper, uniformer
-        JEWELER,             // Smykker, ædelsten, ringe
-        HERBALIST,           // Urter, salver, naturmedicin
-        ENCHANTER,           // Fortryllelse af genstande
-        BOOKSELLER,          // Bøger, skrifter, trylleruller
-        BAKER,               // Brød, kager, bagværk
-        BUTCHER,             // Kød, spegepølser, tørret kød
-        INN,                 // Værtshus – mad, drikke og overnatning
-        STABLE,              // Heste, staldplads, udstyr til rejser
-        FLETCHER,            // Buer, pile, armbrøste
-        FISHMONGER,          // Fisk, skaldyr, saltet mad
-        CARPENTER,           // Træarbejde, møbler, vogne
-        POTTER,              // Lerkrukker, fade, service
-        CURIO_SHOP           // Mystiske genstande, sjældne fund, nips
+        BLACKSMITH,
+        ALCHEMIST,
+        GENERAL_STORE,
+        MAGIC_SHOP,
+        ARMORER,
+        WEAPONSMITH,
+        TAILOR,
+        JEWELER,
+        HERBALIST,
+        ENCHANTER,
+        BOOKSELLER,
+        BAKER,
+        BUTCHER,
+        INN,
+        STABLE,
+        FLETCHER,
+        FISHMONGER,
+        CARPENTER,
+        POTTER,
+        CURIO_SHOP
+    }
+
+    @Override
+    public String toString() {
+        return "Shop{id=" + id +
+                ", name='" + name + '\'' +
+                ", shoptype=" + shoptype +
+                ", owner='" + owner + '\'' +
+                '}';
     }
 }
