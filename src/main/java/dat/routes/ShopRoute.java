@@ -13,11 +13,11 @@ public class ShopRoute {
     protected EndpointGroup getRoutes() {
         return () -> {
             get("/populate", shopController::populate);       // populate DB from JSON
-            post("/", shopController::create);    // create new shop (USER role required)
+            post("/", shopController::create, Role.ADMIN);    // create new shop (ADMIN role required)
             get("/", shopController::readAll);                // get all shops
             get("/{id}", shopController::read);               // get shop by id
-            put("/{id}", shopController::update);             // update shop by id
-            delete("/{id}", shopController::delete);          // delete shop by id
+            put("/{id}", shopController::update, Role.ADMIN);             // update shop by id (ADMIN role required)
+            delete("/{id}", shopController::delete, Role.ADMIN);          // delete shop by id (ADMIN role required)
         };
     }
 }

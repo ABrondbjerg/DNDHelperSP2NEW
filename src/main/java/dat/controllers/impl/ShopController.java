@@ -43,14 +43,14 @@ public class ShopController implements IController<ShopDTO, Integer> {
     public void update(Context ctx) {
         Integer id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
         ShopDTO updated = dao.update(id, validateEntity(ctx));
-        ctx.status(202).json("{\"message\": \"Shop with ID " + id + " deleted successfully\"}");
+        ctx.status(202).json("{\"message\": \"Shop with ID " + id + " updated successfully\"}");
     }
 
     @Override
     public void delete(Context ctx) {
         Integer id = ctx.pathParamAsClass("id", Integer.class).check(this::validatePrimaryKey, "Not a valid id").get();
         dao.delete(id);
-        ctx.status(202).json("{\"message\": \"Town with ID " + id + " deleted successfully\"}");
+        ctx.status(202).json("{\"message\": \"Shop with ID " + id + " deleted successfully\"}");
     }
 
     @Override
