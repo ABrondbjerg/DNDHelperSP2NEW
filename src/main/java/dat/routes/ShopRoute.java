@@ -13,7 +13,7 @@ public class ShopRoute {
     protected EndpointGroup getRoutes() {
         return () -> {
             get("/populate", shopController::populate);       // populate DB from JSON
-            post("/", shopController::create, Role.USER);    // create new shop (USER role required)
+            post("/", shopController::create);    // create new shop (USER role required)
             get("/", shopController::readAll);                // get all shops
             get("/{id}", shopController::read);               // get shop by id
             put("/{id}", shopController::update);             // update shop by id

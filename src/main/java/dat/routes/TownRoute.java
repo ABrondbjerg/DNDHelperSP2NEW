@@ -14,7 +14,7 @@ public class TownRoute {
     protected EndpointGroup getRoutes() {
         return () -> {
             get("/populate", townController::populate);      // populate DB from JSON
-            post("/", townController::create, Role.USER);    // create new town (USER role required)
+            post("/", townController::create);    // create new town (USER role required)
             get("/", townController::readAll);               // get all towns
             get("/{id}", townController::read);              // get town by id
             put("/{id}", townController::update);            // update town by id
