@@ -1,3 +1,90 @@
+// Town API
+
+### Populate datbase with towns
+GET {{url}}/town/populate/
+
+
+### Get all towns including shops
+GET {{url}}/town/
+
+
+### Get specific town by ID (ID 1 in this example)
+GET {{url}}/town/1
+
+
+### Update specific town by ID
+PUT http://localhost:7070/api/town/1
+Content-Type: application/json
+
+{
+  "name": "Updated town Name",
+  "description": "Updated town description",
+  "features": "Updated town features"
+}
+
+
+### Create a new town
+POST {{url}}/town/
+Content-Type: application/json
+
+{
+  "name": "New Town Name",
+  "description": "New town description",
+  "features": "New town features"
+}
+
+
+### Delete a town by ID including shops (ID 2 in this example)
+DELETE {{url}}/town/2
+
+
+
+// Shop API
+
+### Populate datbase with shops
+GET {{url}}/shop/populate/
+
+
+### Get all shops
+GET {{url}}/shop/
+
+
+### Get specific shop by ID (ID 1 in this example)
+GET {{url}}/shop/1
+
+
+### Update specific shop by ID
+PUT http://localhost:7070/api/shop/1
+Content-Type: application/json
+
+{
+  "name": "Updated shop Name",
+  "shoptype": "WEAPONSMITH",
+  "owner": "Updated shop features"
+}
+
+
+### Create a new shop
+POST {{url}}/shop/
+Content-Type: application/json
+
+{
+  "name": "New shop Name",
+  "shoptype": "BLACKSMITH",
+  "owner": "New shop features"
+}
+
+
+### Delete a shop by ID (ID 1 in this example)
+DELETE {{url}}/shop/1
+
+
+
+
+
+
+
+
 ### A simple get request to the test endpoint. No need for login
 GET {{url}}/auth/test/
 

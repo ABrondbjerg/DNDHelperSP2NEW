@@ -25,8 +25,9 @@ public class Shop {
 
     private String owner;
 
-    @ManyToMany(mappedBy = "shops")
-    private java.util.List<Town> towns;
+    @ManyToOne
+    @JoinColumn(name = "town_id")
+    private Town town;
 
     public Shop(@JsonProperty("name") String name,
                 @JsonProperty("shoptype") ShopType shoptype,

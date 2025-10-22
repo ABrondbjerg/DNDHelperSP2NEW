@@ -12,6 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Populate {
+    EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
     public static void populateDatabase(EntityManagerFactory emf){
 
@@ -20,6 +21,7 @@ public class Populate {
         List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
+        List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
 
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
@@ -59,13 +61,23 @@ public class Populate {
 
     }
 
-    private static <T> List<T> loadJsonFile(String path, TypeReference<List<T>> typeRef) {
+    /**
+     * Generic method to load any JSON list into a list of objects
+     */
+    public static <T> List<T> loadJsonFile(String path, TypeReference<List<T>> typeRef) {
         ObjectMapper mapper = new ObjectMapper();
         try (InputStream input = Populate.class.getResourceAsStream(path)) {
-            if (input == null) throw new IOException("Could not find " + path + " in resources folder.");
+            if (input == null) {
+                throw new IOException("Could not find " + path + " in resources folder.");
+            }
             return mapper.readValue(input, typeRef);
         } catch (IOException e) {
             throw new RuntimeException("Error reading " + path, e);
         }
+    }
+
+    // Optional main for testing
+    public static void main(String[] args) {
+        populateTownsAndShops(HibernateConfig.getEntityManagerFactory());
     }
 }

@@ -23,12 +23,7 @@ public class Town {
     private String description;
     private String features;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "town_shops",
-            joinColumns = @JoinColumn(name = "town_id"),
-            inverseJoinColumns = @JoinColumn(name = "shop_id")
-    )
+    @OneToMany(mappedBy = "town", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Shop> shops = new ArrayList<>();
 
     public Town(String name, String description, String features) {
