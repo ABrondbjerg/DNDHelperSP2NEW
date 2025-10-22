@@ -1,5 +1,6 @@
 package dat.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import dat.entities.Town;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,13 +10,17 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TownDTO {
+
     private Long id;
     private String name;
     private String description;
     private String features;
     private List<ShopDTO> shops;
 
+    // ✅ No-arg constructor for Jackson
+    public TownDTO() {}
 
     public TownDTO(Town town) {
         this.id = town.getId();

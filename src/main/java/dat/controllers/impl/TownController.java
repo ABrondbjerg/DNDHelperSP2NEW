@@ -50,7 +50,7 @@ public class TownController implements IController<TownDTO, Long> {
     public void delete(Context ctx) {
         Long id = ctx.pathParamAsClass("id", Long.class).check(this::validatePrimaryKey, "Not a valid id").get();
         dao.delete(id);
-        ctx.status(204);
+        ctx.status(202).json("{\"message\": \"Town with ID " + id + " deleted successfully\"}");
     }
 
     @Override
