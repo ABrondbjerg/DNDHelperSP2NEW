@@ -2,8 +2,11 @@ package dat.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dat.daos.impl.NPCDAO;
 import dat.entities.Shop;
 import dat.entities.Town;
+import dat.entities.NPC;
+import dat.daos.IDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -21,6 +24,7 @@ public class Populate {
         // Load JSON
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
+        List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
 
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -32,7 +36,10 @@ public class Populate {
             // Persist shops first
             shops.forEach(em::persist);
 
-            // Assign 3 random shops to each town
+            // persist all npcs first
+            npcDAO.saveAll(npcs);
+
+            // 2️⃣ Assign 3 random shops to each town
             towns.forEach(town -> town.assignRandomShops(shops));
 
             // Persist towns
@@ -41,7 +48,12 @@ public class Populate {
             em.getTransaction().commit();
         }
 
-        System.out.println("✅ Towns and Shops database populated successfully!");
+        // Print towns to verify
+        towns.forEach(System.out::println);
+        System.out.println("--- Database populated successfully! ---");
+
+
+
     }
 
     /**
