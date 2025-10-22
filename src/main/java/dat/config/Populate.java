@@ -2,8 +2,11 @@ package dat.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dat.daos.impl.NPCDAO;
 import dat.entities.Shop;
 import dat.entities.Town;
+import dat.entities.NPC;
+import dat.daos.IDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -16,16 +19,20 @@ public class Populate {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-
+        NPCDAO npcDAO = new NPCDAO(emf);
         // Load shops and towns from JSON
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
+        List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
 
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
             // 1️⃣ Persist all shops first
             shops.forEach(em::persist);
+
+            // persist all npcs first
+            npcDAO.saveAll(npcs);
 
             // 2️⃣ Assign 3 random shops to each town
             towns.forEach(town -> town.assignRandomShops(shops));
@@ -39,6 +46,9 @@ public class Populate {
         // Print towns to verify
         towns.forEach(System.out::println);
         System.out.println("--- Database populated successfully! ---");
+
+
+
     }
 
     private static <T> List<T> loadJsonFile(String path, TypeReference<List<T>> typeRef) {
