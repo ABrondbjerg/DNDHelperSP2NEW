@@ -16,11 +16,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class Populate {
+    EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
     /**
      * Public method for DAOs/controllers to populate the database
+
      */
     public static void populateTownsAndShops(EntityManagerFactory emf) {
+        NPCDAO npcDAO = new NPCDAO(emf);
         // Load JSON
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
