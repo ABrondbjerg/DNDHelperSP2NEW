@@ -40,8 +40,6 @@ Authorization: Bearer {{jwt_token}}
 {
     "role": "admin"
 }
-Accept: application/json
-Authorization: Bearer {{jwt_token}}
 
 
 ### Reset token
