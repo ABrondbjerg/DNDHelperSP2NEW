@@ -21,7 +21,6 @@ public class Populate {
         List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
-        List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
 
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
@@ -78,6 +77,6 @@ public class Populate {
 
     // Optional main for testing
     public static void main(String[] args) {
-        populateTownsAndShops(HibernateConfig.getEntityManagerFactory());
+        populateDatabase(HibernateConfig.getEntityManagerFactory());
     }
 }

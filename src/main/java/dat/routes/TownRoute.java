@@ -14,11 +14,11 @@ public class TownRoute {
     protected EndpointGroup getRoutes() {
         return () -> {
             get("/populate", townController::populate);      // populate DB from JSON
-            post("/", townController::create);    // create new town (USER role required)
+            post("/", townController::create, Role.ADMIN);    // create new town (ADMIN role required)
             get("/", townController::readAll);               // get all towns
             get("/{id}", townController::read);              // get town by id
-            put("/{id}", townController::update);            // update town by id
-            delete("/{id}", townController::delete);         // delete town by id
+            put("/{id}", townController::update, Role.ADMIN);            // update town by id (ADMIN role required)
+            delete("/{id}", townController::delete, Role.ADMIN);         // delete town by id (ADMIN role required)
         };
     }
 }

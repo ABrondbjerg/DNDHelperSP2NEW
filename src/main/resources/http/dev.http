@@ -1,4 +1,41 @@
-// Town API
+### A simple get request to the test endpoint. No need for login
+GET {{url}}/auth/test/
+
+### Create a new user - this one will only get a USER role by default
+POST {{url}}/auth/register/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+###
+POST {{url}}/auth/login/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+### Add admin role to user
+POST {{url}}/auth/user/addrole/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "admin"
+}
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+
+
+### TOWN
 
 ### Populate datbase with towns
 GET {{url}}/town/populate/
@@ -15,6 +52,7 @@ GET {{url}}/town/1
 ### Update specific town by ID
 PUT http://localhost:7070/api/town/1
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "Updated town Name",
@@ -26,6 +64,7 @@ Content-Type: application/json
 ### Create a new town
 POST {{url}}/town/
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "New Town Name",
@@ -34,8 +73,10 @@ Content-Type: application/json
 }
 
 
-### Delete a town by ID including shops (ID 2 in this example)
-DELETE {{url}}/town/2
+### Delete a town by ID including shops (ID 1 in this example)
+DELETE {{url}}/town/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 
 
@@ -56,6 +97,7 @@ GET {{url}}/shop/1
 ### Update specific shop by ID
 PUT http://localhost:7070/api/shop/1
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "Updated shop Name",
@@ -67,6 +109,7 @@ Content-Type: application/json
 ### Create a new shop
 POST {{url}}/shop/
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "name": "New shop Name",
@@ -77,13 +120,8 @@ Content-Type: application/json
 
 ### Delete a shop by ID (ID 1 in this example)
 DELETE {{url}}/shop/1
-
-
-
-
-
-
-
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### A simple get request to the test endpoint. No need for login
 GET {{url}}/auth/test/
