@@ -2,60 +2,62 @@ package dat.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.daos.impl.NPCDAO;
-import dat.entities.Shop;
-import dat.entities.Town;
-import dat.entities.NPC;
-import dat.daos.IDAO;
+import dat.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Populate {
     EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
 
-    /**
-     * Public method for DAOs/controllers to populate the database
+    public static void populateDatabase(EntityManagerFactory emf){
 
-     */
-    public static void populateTownsAndShops(EntityManagerFactory emf) {
-        NPCDAO npcDAO = new NPCDAO(emf);
-        // Load JSON
+        List<Action> actions = loadJsonFile("/actions.json", new TypeReference<List<Action>>() {});
+        List<Monster> monsters = loadJsonFile("/monsters.json", new TypeReference<List<Monster>>() {});
+        List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
         List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
 
-        try (EntityManager em = emf.createEntityManager()) {
+        try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
 
-            // Clear existing data (optional)
-            em.createQuery("DELETE FROM Town").executeUpdate();
-            em.createQuery("DELETE FROM Shop").executeUpdate();
+            //persist all actions
+            actions.forEach(em::persist);
 
-            // Persist shops first
+
+            //Map persisted Actions by name for Monster to reference
+            Map<String, Action> actionMap = actions.stream()
+                    .collect(Collectors.toMap(Action::getName, a -> a));
+
+            for (Monster monster : monsters) {
+                if (monster.getActions() != null && !monster.getActions().isEmpty()) {
+                    Set<Action> managedActions = monster.getActions().stream()
+                            .map(a -> actionMap.get(a.getName()))
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toSet());
+                    monster.getActions().clear();
+                    monster.getActions().addAll(managedActions);
+                }
+                em.persist(monster);
+            }
+
+
+            npcs.forEach(em::persist);
             shops.forEach(em::persist);
 
-            // persist all npcs first
-            npcDAO.saveAll(npcs);
-
-            // 2️⃣ Assign 3 random shops to each town
             towns.forEach(town -> town.assignRandomShops(shops));
 
-            // Persist towns
             towns.forEach(em::persist);
 
             em.getTransaction().commit();
         }
 
-        // Print towns to verify
-        towns.forEach(System.out::println);
         System.out.println("--- Database populated successfully! ---");
-
-
 
     }
 
