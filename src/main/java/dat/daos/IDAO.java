@@ -1,5 +1,7 @@
 package dat.daos;
 
+import dat.dtos.NPCDTO;
+
 import java.util.List;
 
 public interface IDAO<T, I> {
