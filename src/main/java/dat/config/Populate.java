@@ -1,8 +1,10 @@
-package dat;
+package dat.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dat.entities.*;
+//import dat.entities.subEntities.Action;
+import dat.entities.subEntities.MonsterAction;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -16,7 +18,7 @@ public class Populate {
 
     public static void populateDatabase(EntityManagerFactory emf){
 
-        List<Action> actions = loadJsonFile("/actions.json", new TypeReference<List<Action>>() {});
+       // List<Action> actions = loadJsonFile("/actions.json", new TypeReference<List<Action>>() {});
         List<Monster> monsters = loadJsonFile("/monsters.json", new TypeReference<List<Monster>>() {});
         List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
@@ -27,7 +29,7 @@ public class Populate {
             em.getTransaction().begin();
 
             //persist all actions
-            actions.forEach(em::persist);
+          /*  actions.forEach(em::persist);
 
 
             //Map persisted Actions by name for Monster to reference
@@ -36,19 +38,25 @@ public class Populate {
 
             for (Monster monster : monsters) {
                 if (monster.getActions() != null && !monster.getActions().isEmpty()) {
-                    Set<Action> managedActions = monster.getActions().stream()
-                            .map(a -> actionMap.get(a.getName()))
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toSet());
-                    monster.getActions().clear();
-                    monster.getActions().addAll(managedActions);
+                    for (MonsterAction monsterAction : monster.getActions()) {
+                        Action managedAction = actionMap.get(monsterAction.getName());
+                        if (managedAction != null) {
+                            // create a relationship between them
+                            // (requires adding this field to MonsterAction)
+                            monsterAction.setAbility(null); // example placeholder
+                            // if you have a field like baseAction, do:
+                            // monsterAction.setBaseAction(managedAction);
+                        }
+                    }
                 }
                 em.persist(monster);
             }
+*/
 
 
             npcs.forEach(em::persist);
             shops.forEach(em::persist);
+            monsters.forEach(em::persist);
 
 
             // Assign 3 random shops to each town

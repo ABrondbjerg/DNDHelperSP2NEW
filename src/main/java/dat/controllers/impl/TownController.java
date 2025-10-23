@@ -1,6 +1,6 @@
 package dat.controllers.impl;
 
-import dat.HibernateConfig;
+import dat.config.HibernateConfig;
 import dat.controllers.IController;
 import dat.daos.impl.TownDAO;
 import dat.dtos.TownDTO;

@@ -1,6 +1,6 @@
 package dat.daos;
 
-import dat.HibernateConfig;
+import dat.config.HibernateConfig;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import jakarta.persistence.EntityManagerFactory;

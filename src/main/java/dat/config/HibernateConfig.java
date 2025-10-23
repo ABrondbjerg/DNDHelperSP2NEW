@@ -1,6 +1,12 @@
 package dat.config;
 
 import dat.entities.Monster;
+import dat.entities.NPC;
+import dat.entities.Shop;
+import dat.entities.Town;
+import dat.entities.subEntities.MonsterAbility;
+import dat.entities.subEntities.MonsterAction;
+import dat.entities.subEntities.MonsterDamage;
 import dat.security.entities.Role;
 import dat.security.entities.User;
 import dat.utils.Utils;
@@ -45,7 +51,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Town.class);
         configuration.addAnnotatedClass(Shop.class);
         configuration.addAnnotatedClass(Monster.class);
-        configuration.addAnnotatedClass(Action.class);
+      //  configuration.addAnnotatedClass(Action.class);
         configuration.addAnnotatedClass(NPC.class);
         configuration.addAnnotatedClass(Monster.class);
         configuration.addAnnotatedClass(MonsterAction.class);

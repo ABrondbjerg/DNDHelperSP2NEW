@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import dat.daos.IDAO;
 import dat.dtos.ShopDTO;
 import dat.entities.Shop;
-import dat.Populate;
+import dat.config.Populate;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
