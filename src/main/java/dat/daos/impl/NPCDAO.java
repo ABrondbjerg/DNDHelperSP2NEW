@@ -1,10 +1,10 @@
 package dat.daos.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import dat.config.Populate;
 import dat.daos.IDAO;
 import dat.dtos.NPCDTO;
 import dat.entities.NPC;
-import dat.config.Populate;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
