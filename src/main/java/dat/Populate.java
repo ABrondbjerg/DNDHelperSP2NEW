@@ -23,7 +23,7 @@ public class Populate {
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
 
 
-        try (EntityManager em = emf.createEntityManager()){
+        try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
             //persist all actions
@@ -50,6 +50,8 @@ public class Populate {
             npcs.forEach(em::persist);
             shops.forEach(em::persist);
 
+
+            // Assign 3 random shops to each town
             towns.forEach(town -> town.assignRandomShops(shops));
 
             towns.forEach(em::persist);
@@ -58,6 +60,8 @@ public class Populate {
         }
 
         System.out.println("--- Database populated successfully! ---");
+
+
 
     }
 

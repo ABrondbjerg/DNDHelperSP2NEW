@@ -1,6 +1,6 @@
 package dat.entities;
 
-//import app.dtos.PlaceholderDTO; // TODO: Ret import til korrekt DTO
+import dat.dtos.NPCDTO; // TODO: Ret import til korrekt DTO
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
