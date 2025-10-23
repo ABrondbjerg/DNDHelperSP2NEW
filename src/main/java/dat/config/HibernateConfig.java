@@ -1,5 +1,10 @@
 package dat.config;
 
+import dat.entities.Action;
+import dat.entities.Monster;
+import dat.entities.subEntities.MonsterAbility;
+import dat.entities.subEntities.MonsterAction;
+import dat.entities.subEntities.MonsterDamage;
 import dat.security.entities.Role;
 import dat.security.entities.User;
 import dat.utils.Utils;
@@ -41,11 +46,15 @@ public class HibernateConfig {
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-        configuration.addAnnotatedClass(Hotel.class);
-        configuration.addAnnotatedClass(Room.class);
+        configuration.addAnnotatedClass(Monster.class);
+        configuration.addAnnotatedClass(MonsterAction.class);
+        configuration.addAnnotatedClass(MonsterAbility.class);
+        configuration.addAnnotatedClass(MonsterDamage.class);
+        configuration.addAnnotatedClass(Action.class); //Skal nok slettes
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Role.class);
     }
+
 
     private static EntityManagerFactory createEMF(boolean forTest) {
         try {
