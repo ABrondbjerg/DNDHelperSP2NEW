@@ -1,4 +1,4 @@
-package dat.config;
+package dat;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +21,7 @@ public class Populate {
         List<NPC> npcs = loadJsonFile("/NPCs.json", new TypeReference<List<NPC>>() {});
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
+
 
         try (EntityManager em = emf.createEntityManager()){
             em.getTransaction().begin();
@@ -77,6 +78,7 @@ public class Populate {
 
     // Optional main for testing
     public static void main(String[] args) {
+
         populateDatabase(HibernateConfig.getEntityManagerFactory());
     }
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class NPCDTO {
+    private Integer id;
     private String name;
     private String description;
     private RaceType race;
@@ -19,5 +20,13 @@ public class NPCDTO {
         this.description = description;
         this.race = race;
         this.professions = professions;
+    }
+
+    public NPCDTO(dat.entities.NPC npc){
+        this.id = npc.getId();
+        this.name = npc.getName();
+        this.description = npc.getDescription();
+        this.race = npc.getRace();
+        this.professions = npc.getProfessions();
     }
 }
