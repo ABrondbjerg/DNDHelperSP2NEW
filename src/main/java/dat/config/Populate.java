@@ -23,7 +23,6 @@ public class Populate {
 
      */
     public static void populateTownsAndShops(EntityManagerFactory emf) {
-        NPCDAO npcDAO = new NPCDAO(emf);
         // Load JSON
         List<Shop> shops = loadJsonFile("/shops.json", new TypeReference<List<Shop>>() {});
         List<Town> towns = loadJsonFile("/towns.json", new TypeReference<List<Town>>() {});
@@ -40,7 +39,7 @@ public class Populate {
             shops.forEach(em::persist);
 
             // persist all npcs first
-            npcDAO.saveAll(npcs);
+            npcs.forEach(em::persist);
 
             // 2️⃣ Assign 3 random shops to each town
             towns.forEach(town -> town.assignRandomShops(shops));

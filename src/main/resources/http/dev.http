@@ -38,6 +38,46 @@ Content-Type: application/json
 DELETE {{url}}/town/2
 
 
+// NPC API
+
+### Populate database with NPCs
+GET {{url}}/npc/populate/
+
+
+### Get all NPCs
+GET {{url}}/npc/
+
+
+### Get specific NPC by ID (example: ID 1)
+GET {{url}}/npc/1
+
+
+### Update specific NPC by ID
+PUT http://localhost:7070/api/npc/1
+Content-Type: application/json
+
+{
+  "name": "Updated NPC Name",
+  "race": "HALFELF",
+  "professions": "Updated Profession(s)",
+  "description": "Updated description"
+}
+
+
+### Create a new NPC
+POST {{url}}/npc/
+Content-Type: application/json
+
+{
+  "name": "New NPC Name",
+  "race": "HUMAN",
+  "professions": "Blacksmith",
+  "description": "A skilled blacksmith living in the capital city."
+}
+
+
+### Delete an NPC by ID (example: ID 2)
+DELETE {{url}}/npc/2
 
 // Shop API
 
