@@ -1,5 +1,6 @@
 package dat.routes;
 
+
 import dat.controllers.impl.MonsterController;
 import dat.dtos.MonsterDTO;
 import dat.security.enums.Role;
@@ -10,28 +11,16 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class MonsterRoutes {
 
-    private final MonsterController controller = new MonsterController();
+    private final MonsterController monsterController = new MonsterController();
 
     protected EndpointGroup getRoutes() {
         return () -> {
-            post("/", controller::create, Role.USER);
-            get("/", controller::readAll);
-
-            // Ekstern API
-            get("/external/{name}", ctx -> {
-                String name = ctx.pathParam("name");
-                MonsterDTO dto = MonsterServices.fetchMonsterByName(name);
-
-                if (dto != null) {
-                    ctx.json(dto);
-                } else {
-                    ctx.status(404).result("Monster not found: " + name);
-                }
-            });
-
-            get("/{id}", controller::read);
-            put("/{id}", controller::update);
-            delete("/{id}", controller::delete);
+            get("/populate", monsterController::populate);      // populate DB from JSON
+            post("/", monsterController::create, Role.ADMIN);    // create new town (ADMIN role required)
+            get("/", monsterController::readAll);               // get all towns
+            get("/{id}", monsterController::read);              // get town by id
+            put("/{id}", monsterController::update, Role.ADMIN);            // update town by id (ADMIN role required)
+            delete("/{id}", monsterController::delete, Role.ADMIN);         // delete town by id (ADMIN role required)
         };
     }
 }

@@ -1,8 +1,10 @@
 package dat.daos.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import dat.daos.IDAO;
 import dat.dtos.MonsterDTO;
 import dat.entities.Monster;
+import dat.config.Populate;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
-public class MonsterDAO implements IDAO<MonsterDTO, Integer> {
+public class MonsterDAO implements IDAO<MonsterDTO, Long> {
 
     private static MonsterDAO instance;
     private static EntityManagerFactory emf;
@@ -24,11 +26,21 @@ public class MonsterDAO implements IDAO<MonsterDTO, Integer> {
         return instance;
     }
 
-    @Override
-    public MonsterDTO read(Integer id) {
+    // --- JSON Population ---
+    public void populate() {
+        List<Monster> monsters = Populate.loadJsonFile("/monsters.json", new TypeReference<List<Monster>>() {});
         try (EntityManager em = emf.createEntityManager()) {
-            Monster entity = em.find(Monster.class, id);
-            return entity != null ? new MonsterDTO(entity) : null;
+            em.getTransaction().begin();
+            monsters.forEach(em::persist);
+            em.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public MonsterDTO read(Long id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            Monster monster = em.find(Monster.class, id);
+            return monster != null ? new MonsterDTO(monster) : null;
         }
     }
 
@@ -36,8 +48,7 @@ public class MonsterDAO implements IDAO<MonsterDTO, Integer> {
     public List<MonsterDTO> readAll() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<MonsterDTO> query = em.createQuery(
-                    "SELECT new dat.dtos.MonsterDTO(m) FROM Monster m", MonsterDTO.class
-            );
+                    "SELECT new dat.dtos.MonsterDTO(m) FROM Monster m", MonsterDTO.class);
             return query.getResultList();
         }
     }
@@ -46,61 +57,42 @@ public class MonsterDAO implements IDAO<MonsterDTO, Integer> {
     public MonsterDTO create(MonsterDTO dto) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Monster entity = dto.toEntity();
-            em.persist(entity);
+            Monster monster = new Monster(dto.getName(), dto.getArmorClass(), dto.getHitPoints(), dto.getSize());
+            em.persist(monster);
             em.getTransaction().commit();
-            return new MonsterDTO(entity);
+            return new MonsterDTO(monster);
         }
     }
 
     @Override
-    public MonsterDTO update(Integer id, MonsterDTO monsterDTO) {
+    public MonsterDTO update(Long id, MonsterDTO dto) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-
             Monster monster = em.find(Monster.class, id);
-            if (monster == null) {
-                em.getTransaction().rollback();
-                return null;
+            if (monster != null) {
+                monster.setName(dto.getName());
+                monster.setArmorClass(dto.getArmorClass());
+                monster.setHitPoints(dto.getHitPoints());
+                monster.setSize(dto.getSize());
+                em.merge(monster);
             }
-
-            // Opdater felterne — brug evt. null-checks, hvis ikke alle felter skal opdateres
-            monster.setName(monsterDTO.getName());
-            monster.setType(monsterDTO.getType());
-            monster.setAlignment(monsterDTO.getAlignment());
-            monster.setHitPoints(monsterDTO.getHitPoints());
-            monster.setArmorClass(monsterDTO.getArmorClass());
-            monster.setStrength(monsterDTO.getStrength());
-            monster.setDexterity(monsterDTO.getDexterity());
-            monster.setConstitution(monsterDTO.getConstitution());
-            monster.setIntelligence(monsterDTO.getIntelligence());
-            monster.setWisdom(monsterDTO.getWisdom());
-            monster.setCharisma(monsterDTO.getCharisma());
-            monster.setChallengeRating(monsterDTO.getChallengeRating());
-            monster.setSize(monsterDTO.getSize());
-            monster.setSpeed(monsterDTO.getSpeed());
-            monster.setImage(monsterDTO.getImage());
-            monster.setUrl(monsterDTO.getUrl());
-
-            Monster merged = em.merge(monster);
             em.getTransaction().commit();
-
-            return merged != null ? new MonsterDTO(merged) : null;
+            return new MonsterDTO(monster);
         }
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Monster entity = em.find(Monster.class, id);
-            if (entity != null) em.remove(entity);
+            Monster monster = em.find(Monster.class, id);
+            if (monster != null) em.remove(monster);
             em.getTransaction().commit();
         }
     }
 
     @Override
-    public boolean validatePrimaryKey(Integer id) {
+    public boolean validatePrimaryKey(Long id) {
         try (EntityManager em = emf.createEntityManager()) {
             return em.find(Monster.class, id) != null;
         }
