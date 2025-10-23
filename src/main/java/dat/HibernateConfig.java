@@ -1,4 +1,4 @@
-package dat.config;
+package dat;
 
 import dat.entities.*;
 import dat.security.entities.Role;

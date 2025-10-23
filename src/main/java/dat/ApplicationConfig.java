@@ -1,4 +1,4 @@
-package dat.config;
+package dat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dat.routes.Routes;

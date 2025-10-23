@@ -1,5 +1,7 @@
 package dat.config;
 
+import dat.HibernateConfig;
+import dat.Populate;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;

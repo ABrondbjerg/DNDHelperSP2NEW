@@ -1,10 +1,9 @@
 package dat.controllers.impl;
 
-import dat.config.HibernateConfig;
+import dat.HibernateConfig;
 import dat.controllers.IController;
 import dat.daos.impl.TownDAO;
 import dat.dtos.TownDTO;
-import dat.entities.Town;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
