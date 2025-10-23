@@ -1,6 +1,6 @@
-package dat;
+package dat.config;
 
-import dat.entities.*;
+import dat.entities.Monster;
 import dat.security.entities.Role;
 import dat.security.entities.User;
 import dat.utils.Utils;
@@ -47,9 +47,14 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Monster.class);
         configuration.addAnnotatedClass(Action.class);
         configuration.addAnnotatedClass(NPC.class);
+        configuration.addAnnotatedClass(Monster.class);
+        configuration.addAnnotatedClass(MonsterAction.class);
+        configuration.addAnnotatedClass(MonsterAbility.class);
+        configuration.addAnnotatedClass(MonsterDamage.class);
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Role.class);
     }
+
 
     private static EntityManagerFactory createEMF(boolean forTest) {
         try {
@@ -115,7 +120,7 @@ public class HibernateConfig {
         props.put("hibernate.connection.password", "postgres");
         props.put("hibernate.archive.autodetection", "class");
         props.put("hibernate.show_sql", "true");
-        props.put("hibernate.hbm2ddl.auto", "create"); // update for production
+        props.put("hibernate.hbm2ddl.auto", "create-drop"); // update for production
         return props;
     }
 

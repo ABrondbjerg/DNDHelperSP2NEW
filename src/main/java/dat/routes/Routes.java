@@ -10,11 +10,14 @@ public class Routes {
 
     private final TownRoute townRoute = new TownRoute();
     private final ShopRoute shopRoute = new ShopRoute();
+    private final MonsterRoutes monsterRoute = new MonsterRoutes();
 
     public EndpointGroup getRoutes() {
         return () -> {
             path("/town", townRoute.getRoutes());
             path("/shop", shopRoute.getRoutes());
+            path("/monsters", monsterRoute.getRoutes());
+
         };
     }
 }
