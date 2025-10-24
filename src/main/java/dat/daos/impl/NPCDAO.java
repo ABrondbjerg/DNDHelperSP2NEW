@@ -1,10 +1,10 @@
 package dat.daos.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import dat.config.Populate;
 import dat.daos.IDAO;
 import dat.dtos.NPCDTO;
 import dat.entities.NPC;
+import dat.config.Populate;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -65,7 +65,7 @@ public class NPCDAO implements IDAO<NPCDTO, Integer> {
             NPC npc = new NPC(dto.getName(), dto.getDescription(), dto.getRace(), dto.getProfessions());
             em.persist(npc);
             em.getTransaction().commit();
-            return new NPCDTO(npc.getName(), npc.getDescription(), npc.getRace(), npc.getProfessions());
+            return new NPCDTO(npc);
         }
     }
 

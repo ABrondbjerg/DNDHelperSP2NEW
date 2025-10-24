@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class MonsterDTO {
 
+    private Long id;
     private String name;
     private int armorClass;
     private int hitPoints;
@@ -17,5 +18,10 @@ public class MonsterDTO {
 
 
     public MonsterDTO(Monster monster) {
+        this.id = monster.getId();
+        this.name = monster.getName();
+        this.armorClass = monster.getArmorClass();
+        this.hitPoints = monster.getHitPoints();
+        this.size = monster.getSize();
     }
 }

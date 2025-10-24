@@ -1,5 +1,6 @@
 package dat.dtos;
 
+import dat.entities.NPC;
 import dat.entities.NPC.RaceType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class NPCDTO {
         this.professions = professions;
     }
 
-    public NPCDTO(dat.entities.NPC npc){
+    public NPCDTO(NPC npc){
         this.id = npc.getId();
         this.name = npc.getName();
         this.description = npc.getDescription();
