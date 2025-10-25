@@ -37,6 +37,21 @@ public class HibernateConfig {
             emf = createEMF(getTest());
         return emf;
     }
+    /* GAMMEL KODE FRA GAMMEL GUIDE!!!
+    public static EntityManagerFactory getEntityManagerFactory() {
+        if(System.getenv("PRODUCTION") != null) {
+            return setupHibernateConfigurationForProduction();
+        }
+        return IS_TEST ? getEntityManagerFactoryConfigTest() : getEntityManagerFactoryConfigDevelopment();
+    }
+*/
+    private static EntityManagerFactory setupHibernateConfigurationForProduction() {
+        Properties props = new Properties();
+        props.put("hibernate.connection.url", System.getenv("JDBC_DATABASE_URL"));
+        props.put("hibernate.connection.username", System.getenv("JDBC_DATABASE_USERNAME"));
+        props.put("hibernate.connection.password", System.getenv("JDBC_DATABASE_PASSWORD"));
+        return new Configuration().addProperties(props).buildSessionFactory();
+    }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
         if (emfTest == null){
