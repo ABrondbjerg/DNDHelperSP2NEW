@@ -190,7 +190,72 @@ public class SecurityController implements ISecurityController {
             }
         };
     }
+    public Handler updateUserRole() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                String username = ctx.pathParam("username");
+                String newRole = ctx.bodyAsClass(ObjectNode.class).get("role").asText();
+                securityDAO.updateUserRole(username, newRole);
+                ctx.status(200).json(returnObject.put("msg", "Role updated for " + username));
+            } catch (EntityNotFoundException e) {
+                ctx.status(404).json(returnObject.put("msg", "User not found"));
+            }
+        };
+    }
+    @Override
+    public Handler getAllUsers() {
+        return (ctx) -> {
+            try {
+                // Get all users from database
+                Set<User> users = securityDAO.getAllUsers();
 
+                // Convert to simple list of usernames
+                var userList = users.stream()
+                        .map(user -> {
+                            var userMap = new java.util.HashMap<String, String>();
+                            userMap.put("username", user.getUsername());
+                            return userMap;
+                        })
+                        .collect(Collectors.toList());
+
+                ctx.status(200).json(userList);
+            } catch (Exception e) {
+                ctx.status(500).json("{\"msg\": \"Could not fetch users\"}");
+            }
+        };
+    }
+
+    @Override
+    public Handler updateUser() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                String username = ctx.pathParam("username");
+                ObjectNode body = ctx.bodyAsClass(ObjectNode.class);
+                String newPassword = body.get("password").asText();
+
+                securityDAO.updateUserPassword(username, newPassword);
+                ctx.status(200).json(returnObject.put("msg", "User updated"));
+            } catch (EntityNotFoundException e) {
+                ctx.status(404).json(returnObject.put("msg", "User not found"));
+            }
+        };
+    }
+
+    @Override
+    public Handler deleteUser() {
+        return (ctx) -> {
+            ObjectNode returnObject = objectMapper.createObjectNode();
+            try {
+                String username = ctx.pathParam("username");
+                securityDAO.deleteUser(username);
+                ctx.status(200).json(returnObject.put("msg", "User deleted"));
+            } catch (EntityNotFoundException e) {
+                ctx.status(404).json(returnObject.put("msg", "User not found"));
+            }
+        };
+    }
     // Health check for the API. Used in deployment
     public void healthCheck(@NotNull Context ctx) {
         ctx.status(200).json("{\"msg\": \"API is up and running\"}");

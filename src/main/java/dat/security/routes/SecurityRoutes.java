@@ -24,6 +24,10 @@ public class SecurityRoutes {
                 post("/login", securityController.login(), Role.ANYONE);
                 post("/register", securityController.register(), Role.ANYONE);
                 post("/user/addrole", securityController.addRole(), Role.USER);
+                get("/users", securityController.getAllUsers(), Role.ADMIN);
+                put("/users/{username}", securityController.updateUser(), Role.ADMIN);
+                delete("/users/{username}", securityController.deleteUser(), Role.ADMIN);
+                post("/users/{username}/role", securityController.updateUserRole(), Role.ADMIN);
             });
         };
     }

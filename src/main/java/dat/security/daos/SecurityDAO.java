@@ -11,6 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -83,6 +84,58 @@ public class SecurityDAO implements ISecurityDAO {
                 //em.merge(user);
             em.getTransaction().commit();
             return user;
+        }
+    }
+
+    public Set<User> getAllUsers() {
+        try (EntityManager em = emf.createEntityManager()) {
+            return new HashSet<>(em.createQuery("SELECT u FROM User u", User.class).getResultList());
+        }
+    }
+
+    public void updateUserRole(String username, String newRole) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+
+
+            user.getRoles().clear();
+
+
+            dat.security.entities.Role role = em.find(dat.security.entities.Role.class, newRole);
+            if (role == null) {
+                role = new dat.security.entities.Role(newRole);
+                em.persist(role);
+            }
+            user.addRole(role);
+
+            em.getTransaction().commit();
+        }
+    }
+
+    public void updateUserPassword(String username, String newPassword) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            user.setPassword(newPassword);
+            em.merge(user);
+            em.getTransaction().commit();
+        }
+    }
+
+    public void deleteUser(String username) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            em.remove(user);
+            em.getTransaction().commit();
         }
     }
 }
